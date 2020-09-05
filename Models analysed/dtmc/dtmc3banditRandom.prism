@@ -1,0 +1,61 @@
+dtmc
+
+module bandit1
+
+		b1 : [0..1];
+		[initial] true -> 0.5 : (b1'=0) + 0.5 : (b1'=1);
+
+		[a1] b1=0 -> 0.55:(b1'=1) + 0.45:(b1'=0);
+		[a1] b1=1 -> 0.45:(b1'=0) + 0.55:(b1'=1);
+
+endmodule
+
+module bandit2
+
+		b2 : [0..1];
+
+		[a1] b2=0 -> 0.4:(b2'=1) + 0.6:(b2'=0);
+		[a1] b2=1 -> 0.6:(b2'=0) + 0.4:(b2'=1);
+endmodule
+
+module bandit3
+
+		b3 : [0..1];
+		[initial] true -> 0.5 : (b3'=0) + 0.5 : (b3'=1);
+
+		[a1] b3=0 -> 0.4:(b3'=1) + 0.6:(b3'=0);
+		[a1] b3=1 -> 0.6:(b3'=0) + 0.4:(b3'=1);
+endmodule
+
+
+module scheduler
+		s : [0..3];
+		turn : [-1..1];
+		[initial] turn=-1 -> (turn'=0);
+		//turn 0 is scheduler and 1 is bandits
+
+		[a1] turn=0 -> (turn'=1);
+		[a2] turn=1 -> (1/3):(s'=1)&(turn'=0) + (1/3):(s'=2)&(turn'=0) + (1/3):(s'=3)&(turn'=0);
+
+endmodule
+
+const int kmax; 
+
+module counter 
+
+	k : [0..kmax+1];
+	[a1] k<kmax -> true;
+	[a2] k<kmax -> (k'=min(kmax,k+1));
+	[] k=kmax -> (k'=k+1);
+
+endmodule
+
+label "correct1" = turn=0 & s=1 & b1=1;
+label "correct2" = turn=0 & s=2 & b2=1;
+label "correct3" = turn=0 & s=3 & b3=1;
+
+rewards "correct_guess"
+	turn=0 & s=1 & b1=1 : 1;
+	turn=0 & s=2 & b2=1 : 1;
+	turn=0 & s=3 & b3=1 : 1;
+endrewards

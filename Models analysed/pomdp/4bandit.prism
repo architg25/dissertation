@@ -1,0 +1,82 @@
+pomdp
+
+observables 
+	s, turn, k, v1, v2, v3, v4
+
+endobservables
+
+module bandit1
+
+	b1 : [0..1];
+	[initial] true -> 0.5 : (b1'=0) + 0.5 : (b1'=1);
+	[a1] b1=0 -> 0.50:(b1'=0) + 0.50:(b1'=1);
+	[a1] b1=1 -> 0.50:(b1'=0) + 0.50:(b1'=1);
+
+endmodule
+
+module bandit2
+
+	b2 : [0..1];
+	[initial] true -> 0.5 : (b2'=0) + 0.5 : (b2'=1);
+	[a1] b2=0 -> 0.60:(b2'=0) + 0.40:(b2'=1);
+	[a1] b2=1 -> 0.40:(b2'=0) + 0.60:(b2'=1);
+
+endmodule
+
+module bandit3
+
+	b3 : [0..1];
+	[initial] true -> 0.5 : (b3'=0) + 0.5 : (b3'=1);
+	[a1] b3=0 -> 0.30:(b3'=0) + 0.70:(b3'=1);
+	[a1] b3=1 -> 0.30:(b3'=0) + 0.70:(b3'=1);
+
+endmodule
+
+module bandit4
+
+	b4 : [0..1];
+	[initial] true -> 0.5 : (b4'=0) + 0.5 : (b4'=1);
+	[a1] b4=0 -> 0.55:(b4'=0) + 0.45:(b4'=1);
+	[a1] b4=1 -> 0.45:(b4'=0) + 0.55:(b4'=1);
+
+endmodule
+
+module scheduler 
+
+	s : [0..4];
+	turn : [-1..1];
+	v1 : [0..1];
+	v2 : [0..1];
+	v3 : [0..1];
+	v4 : [0..1];
+	[initial] turn=-1 -> (turn'=0); 
+	[a1] turn=0 -> (turn'=1);
+	[choose1] turn=1 -> (s'=1)&(turn'=0)&(v1'=b1);
+	[choose2] turn=1 -> (s'=2)&(turn'=0)&(v2'=b2);
+	[choose3] turn=1 -> (s'=3)&(turn'=0)&(v3'=b3);
+	[choose4] turn=1 -> (s'=4)&(turn'=0)&(v4'=b4);
+
+endmodule
+
+const int kmax; 
+
+module counter 
+
+	k : [0..kmax+1];
+	[a1] k<kmax -> true;
+	[choose1] k<kmax -> (k'=min(kmax,k+1));
+	[choose2] k<kmax -> (k'=min(kmax,k+1));
+	[choose3] k<kmax -> (k'=min(kmax,k+1));
+	[choose4] k<kmax -> (k'=min(kmax,k+1));
+	[] k=kmax -> (k'=k+1);
+
+endmodule
+
+rewards "correct_guess"
+
+	turn=0 & s=1 & b1=1 : 1;
+	turn=0 & s=2 & b2=1 : 1;
+	turn=0 & s=3 & b3=1 : 1;
+	turn=0 & s=4 & b4=1 : 1;
+
+endrewards

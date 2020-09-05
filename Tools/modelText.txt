@@ -1,0 +1,8 @@
+numberOfModels = 4
+model = pomdp
+numberOfBandits = 2,2,3,4
+probModel0 = [0.50, 0.50, 0.50, 0.50], [0.40, 0.60, 0.60, 0.40]
+probModel1 = [0.60, 0.40, 0.40, 0.60], [0.30, 0.70, 0.30, 0.70]
+probModel2 = [0.50, 0.50, 0.50, 0.50], [0.60, 0.40, 0.40, 0.60], [0.30, 0.70, 0.30, 0.70]
+probModel3 = [0.50, 0.50, 0.50, 0.50], [0.60, 0.40, 0.40, 0.60], [0.30, 0.70, 0.30, 0.70], [0.55, 0.45, 0.45, 0.55]
+fileNames = 2bandit50.prism, 2banditRandom.prism, 3bandit50.prism, 4bandit50.prism

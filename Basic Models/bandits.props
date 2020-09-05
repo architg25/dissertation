@@ -1,0 +1,12 @@
+Rmax=?[F k=kmax+1]
+
+//Rmin=?[F k=kmax+1]
+//Rmin=? [ C<=2*kmax+1 ]
+//Rmax=? [ C<=2*kmax+1 ]
+
+// minimum expected number of steps to get a reward
+//Rmin=?[F "correct1"]
+//Rmin=?[F "correct2"]
+
+//Pmax=? [F "correct1"]
+//Pmax=? [F "correct2"]

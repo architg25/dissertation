@@ -1,0 +1,65 @@
+mdp
+
+module bandit1
+
+		b1 : [0..1];
+
+		[a1] b1=0 -> 0.55:(b1'=1) + 0.45:(b1'=0);
+		[a1] b1=1 -> 0.45:(b1'=0) + 0.55:(b1'=1);
+
+endmodule
+
+module bandit2
+
+		b2 : [0..1];
+
+		[a1] b2=0 -> 0.6:(b2'=1) + 0.4:(b2'=0);
+		[a1] b2=1 -> 0.4:(b2'=0) + 0.6:(b2'=1);
+
+endmodule
+
+module bandit3
+
+		b3 : [0..1];
+
+		[a1] b3=0 -> 0.3:(b3'=1) + 0.7:(b3'=0);
+		[a1] b3=1 -> 0.6:(b3'=0) + 0.4:(b3'=1);
+
+endmodule
+
+module scheduler
+
+		s : [0..3];
+		turn : [0..1];
+
+		[a1] turn=0 -> (turn'=1);
+		[choose1] turn=1 -> (s'=1)&(turn'=0);
+		[choose2] turn=1 -> (s'=2)&(turn'=0);
+		[choose3] turn=1 -> (s'=3)&(turn'=0);
+
+endmodule
+
+const int kmax; // bound on the steps
+
+module counter 
+
+	 k : [0..kmax+1];
+	[a1] k<kmax -> true;
+	[choose1] k<kmax -> (k'=min(kmax,k+1));
+	[choose2] k<kmax -> (k'=min(kmax,k+1));
+	[choose3] k<kmax -> (k'=min(kmax,k+1));
+	[] k=kmax -> (k'=k+1);
+
+endmodule
+
+label "correct1" = s=1 & b1=1;
+label "correct2" = s=2 & b2=1;
+label "correct3" = s=3 & b3=1;
+
+rewards "correct_guess"
+
+	turn=0 & s=1 & b1=1 : 1;
+	turn=0 & s=2 & b2=1 : 1;
+	turn=0 & s=3 & b3=1 : 1;
+
+endrewards
