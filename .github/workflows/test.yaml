@@ -10,8 +10,16 @@ jobs:
   avroReminder:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
-      - name: Send Reminder
-        run: echo "Don't forget to publish schema changes!"
+    - name: Create PR comment
+      uses: actions/github-script@v5
+      with:
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "Don't forget to publish schema changes!"
+          })
