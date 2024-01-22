@@ -1,0 +1,17 @@
+name: Avro Schema Change Reminder
+on:
+  push:
+    paths:
+      - '**.txt'
+  pull_request:
+    paths:
+      - '**.txt'
+jobs:
+  avroReminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Send Reminder
+        run: echo "Don't forget to publish schema changes!"
